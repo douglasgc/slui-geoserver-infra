@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: slui-geo
+spec:
+  ports:
+  - port: 80
+    targetPort: 5678
+  selector:
+    app: slui-geo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slui-geo
+spec:
+  selector:
+    matchLabels:
+      app: slui-geo
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: slui-geo
+    spec:
+      containers:
+      - name: slui-geo
+        image: hashicorp/http-echo
+        args:
+        - "-text=echo1"
+        ports:
+        - containerPort: 5678

@@ -1,0 +1,26 @@
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: slui-geo
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      kubernetes.io/ingress.class: "nginx"
+  spec:
+    ingressClassName: nginx
+    rules:
+      - host: geoserver.slui.dev
+        http:
+          paths:
+            - pathType: Prefix
+              backend:
+                service:
+                  name: geoserver
+                  port:
+                    number: 8080
+              path: /
+    # This section is only required if TLS is to be enabled for the Ingress
+    tls:
+      - hosts:
+        - geoserver.slui.dev
+        secretName: slui-geo-tls
+
