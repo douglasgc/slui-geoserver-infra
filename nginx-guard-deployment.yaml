@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-guard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-guard
+  template:
+    metadata:
+      labels:
+        app: nginx-guard
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-guard-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-guard
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: nginx-guard

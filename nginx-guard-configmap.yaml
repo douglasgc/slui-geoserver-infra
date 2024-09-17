@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-guard-config
+data:
+  nginx.conf: |
+    server {
+      listen 80;
+      
+      # Regras personalizadas do NGINX
+      location / {
+        return 401;
+      }
+    }
